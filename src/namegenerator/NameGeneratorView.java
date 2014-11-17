@@ -28,6 +28,7 @@ public class NameGeneratorView extends javax.swing.JFrame {
             }
 
         });
+        System.err.println("hhh");
     }
     public void setProgressBarValue(){
         
