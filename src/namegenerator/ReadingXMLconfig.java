@@ -23,16 +23,16 @@ import org.w3c.dom.NodeList;
 
 /**
  *
- * @author init0
+ * @author init0 
+ * Singleton
  */
 public class ReadingXMLconfig {
 
-    //private boolean isConfigExt = false;
-
-    private static final File xmlConfig;
-    private static BufferedReader br;
-
-    static {
+    private static ReadingXMLconfig instance = new ReadingXMLconfig();
+    private File xmlConfig;
+    private BufferedReader br;
+    
+    private ReadingXMLconfig(){
         xmlConfig = new File("config.xml");
         try {
             br = new BufferedReader(new FileReader(xmlConfig.getAbsolutePath()));
@@ -40,7 +40,11 @@ public class ReadingXMLconfig {
             Logger.getLogger(ReadingXMLconfig.class.getName()).log(Level.SEVERE, null, ex);
         }
     }
-
+    
+    public static ReadingXMLconfig getInstance(){
+        return instance;
+    }
+    
     public boolean isConfig() {
         if (xmlConfig.exists()) {
             try {
@@ -118,7 +122,7 @@ public class ReadingXMLconfig {
     }
 
     public static void main(String[] args) {
-        ReadingXMLconfig xml = new ReadingXMLconfig();
+        ReadingXMLconfig xml = new ReadingXMLconfig().getInstance();
         xml.readXML().get(0);
         boolean test = xml.isConfig();
         if (test) {
