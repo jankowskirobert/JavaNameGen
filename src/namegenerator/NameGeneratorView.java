@@ -5,6 +5,9 @@
  */
 package namegenerator;
 
+import java.awt.event.ActionEvent;
+import java.awt.event.ActionListener;
+
 /**
  *
  * @author init0
@@ -16,6 +19,15 @@ public class NameGeneratorView extends javax.swing.JFrame {
      */
     public NameGeneratorView() {
         initComponents();
+        jButton1.addActionListener(new ActionListener() {
+
+            @Override
+            public void actionPerformed(ActionEvent e) {
+                jProgressBar1.setValue(50);
+                validate();
+            }
+
+        });
     }
     public void setProgressBarValue(){
         

@@ -111,10 +111,10 @@ public class ReadingXMLconfig {
         return tmp;
     }
 
-    public XMLconfig createXML() {
-        XMLconfig tmp = new XMLconfig();
+    public void createXML(ArrayList<XMLconfig> tmp) {
+        
 
-        return tmp;
+        
     }
 
     public static void main(String[] args) {

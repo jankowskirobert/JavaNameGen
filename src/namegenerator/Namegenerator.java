@@ -18,9 +18,9 @@ public class Namegenerator {
      */
     public static void main(String[] args) throws IOException {
         
-        //new NameGeneratorView().setVisible(true);
+        new NameGeneratorView().setVisible(true);
        // new NameGeneratorFun().fileMethod();
-        new NameGeneratorFun("names.txt");
+        //new NameGeneratorFun("names.txt");
     }
     
 }
