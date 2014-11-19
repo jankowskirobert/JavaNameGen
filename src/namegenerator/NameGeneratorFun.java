@@ -26,7 +26,7 @@ import java.util.Random;
  */
 public class NameGeneratorFun {
 
-    private ArrayList<String> list = new ArrayList<>();
+    private ArrayList<String> list = new ArrayList<String>();
     private String fileName;
     
     //only for test

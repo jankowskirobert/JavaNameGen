@@ -10,8 +10,11 @@ import java.io.File;
 import java.io.FileNotFoundException;
 import java.io.FileReader;
 import java.io.IOException;
+import java.text.SimpleDateFormat;
 import java.util.ArrayList;
 import java.util.Date;
+import java.util.HashMap;
+import java.util.Map;
 import java.util.logging.Level;
 import java.util.logging.Logger;
 import javax.xml.parsers.DocumentBuilder;
@@ -69,10 +72,10 @@ public class ReadingXMLconfig {
      * <generator>
      * dodać funkcje createXML oraz modyfiy jesli sie da
      *
-     * @return XMLconfig
+     * @return ConfigXML
      */
-    public ArrayList<XMLconfig> readXML() {
-        ArrayList<XMLconfig> tmp = new ArrayList<>();// = new XMLconfig();
+    public ArrayList<ConfigXML> readXML() {
+        ArrayList<ConfigXML> tmp = new ArrayList<ConfigXML>();// = new ConfigXML();
         if (isConfig()) {
             try {
                 DocumentBuilder builder = DocumentBuilderFactory.newInstance().newDocumentBuilder();
@@ -80,30 +83,30 @@ public class ReadingXMLconfig {
                 NodeList nodes = doc2.getElementsByTagName("user");
 
                 for (int i = 0; i < nodes.getLength(); i++) {
-                    tmp.add(i, new XMLconfig());
+                    tmp.add(i, new ConfigXML());
                     Node nNode = nodes.item(i);
                     if (nNode.getNodeType() == Node.ELEMENT_NODE) {
                         System.out.println("_______________________");
                         Element eElement = (Element) nNode;
-                        System.out.println("User Name:" + eElement.getAttribute("username"));
-                        tmp.get(i).setReadFromFile(Boolean.valueOf(eElement.getElementsByTagName("readfromfile").item(0).getTextContent()));
+
+                        tmp.get(i).setUserName(eElement.getAttribute("username"));
+
+                        tmp.get(i).setReadFromFile(Boolean.valueOf(
+                                eElement.getElementsByTagName("readfromfile").
+                                item(0).getTextContent()));
 
                         NodeList nList2 = eElement.getElementsByTagName("lastname");
                         System.out.println("----------------------------");
                         for (int temp = 0; temp < nList2.getLength(); temp++) {
                             Node nNode2 = nList2.item(temp);
-                            System.out.println("\nCurrent Element :"
-                                    + nNode2.getNodeName());
+
                             if (nNode.getNodeType() == Node.ELEMENT_NODE) {
                                 Element eElement2 = (Element) nNode2;
-                                System.out.println("First Name : "
-                                        + eElement2
+                                tmp.get(i).setLastname(eElement2.getAttribute("name"));
+                                tmp.get(i).setDate(tmp.get(i).parseStringToDate(eElement2
                                         .getElementsByTagName("date")
                                         .item(0)
-                                        .getTextContent());
-                                System.out.println("First Name2 : "
-                                        + eElement2.getAttribute("name")
-                                );
+                                        .getTextContent()), temp);
                             }
                         }
                     }
@@ -115,9 +118,7 @@ public class ReadingXMLconfig {
         return tmp;
     }
 
-    public void createXML(ArrayList<XMLconfig> tmp) {
-        
-
+    public void createXML(ArrayList<ConfigXML> tmp) {
         
     }
 
@@ -133,43 +134,5 @@ public class ReadingXMLconfig {
         }
     }
 
-    class XMLconfig {
 
-        private boolean readFromFile;
-        private Date date;
-        private ArrayList<String> lastname;
-
-        public boolean isReadFromFile() {
-            return readFromFile;
-        }
-
-        public void setReadFromFile(boolean readFromFile) {
-            this.readFromFile = readFromFile;
-        }
-
-        public Date getDate() {
-            return date;
-        }
-
-        public void setDate(Date date) {
-            this.date = date;
-        }
-
-        public String getLastRandName(final int i) {
-            return lastname.get(i);
-        }
-
-        public void addLastRandName(final int i, String lastRandName) {
-            lastname.add(i, lastRandName);
-        }
-
-        public void addLastRandName(String name) {
-            lastname.add(name);
-        }
-
-        public void setLastRandName(final int i, String name) {
-            lastname.set(i, name);
-        }
-
-    }
 }
