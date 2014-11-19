@@ -10,8 +10,11 @@ import java.io.File;
 import java.io.FileNotFoundException;
 import java.io.FileReader;
 import java.io.IOException;
+import java.text.SimpleDateFormat;
 import java.util.ArrayList;
 import java.util.Date;
+import java.util.HashMap;
+import java.util.Map;
 import java.util.logging.Level;
 import java.util.logging.Logger;
 import javax.xml.parsers.DocumentBuilder;
@@ -23,16 +26,15 @@ import org.w3c.dom.NodeList;
 
 /**
  *
- * @author init0 
- * Singleton
+ * @author rrjj Singleton
  */
 public class ReadingXMLconfig {
 
     private static ReadingXMLconfig instance = new ReadingXMLconfig();
     private File xmlConfig;
     private BufferedReader br;
-    
-    private ReadingXMLconfig(){
+
+    private ReadingXMLconfig() {
         xmlConfig = new File("config.xml");
         try {
             br = new BufferedReader(new FileReader(xmlConfig.getAbsolutePath()));
@@ -40,11 +42,11 @@ public class ReadingXMLconfig {
             Logger.getLogger(ReadingXMLconfig.class.getName()).log(Level.SEVERE, null, ex);
         }
     }
-    
-    public static ReadingXMLconfig getInstance(){
+
+    public static ReadingXMLconfig getInstance() {
         return instance;
     }
-    
+
     public boolean isConfig() {
         if (xmlConfig.exists()) {
             try {
@@ -81,29 +83,31 @@ public class ReadingXMLconfig {
 
                 for (int i = 0; i < nodes.getLength(); i++) {
                     tmp.add(i, new XMLconfig());
+
                     Node nNode = nodes.item(i);
                     if (nNode.getNodeType() == Node.ELEMENT_NODE) {
-                        System.out.println("_______________________");
-                        Element eElement = (Element) nNode;
-                        System.out.println("User Name:" + eElement.getAttribute("username"));
-                        tmp.get(i).setReadFromFile(Boolean.valueOf(eElement.getElementsByTagName("readfromfile").item(0).getTextContent()));
 
+                        Element eElement = (Element) nNode;
+                        
+                        tmp.get(i).setUserName(eElement.getAttribute("username"));
+                        
+                        tmp.get(i).setReadFromFile(Boolean.valueOf(
+                                eElement.getElementsByTagName("readfromfile").
+                                item(0).getTextContent()));
+                        
                         NodeList nList2 = eElement.getElementsByTagName("lastname");
-                        System.out.println("----------------------------");
+                        
                         for (int temp = 0; temp < nList2.getLength(); temp++) {
                             Node nNode2 = nList2.item(temp);
-                            System.out.println("\nCurrent Element :"
-                                    + nNode2.getNodeName());
+
                             if (nNode.getNodeType() == Node.ELEMENT_NODE) {
                                 Element eElement2 = (Element) nNode2;
-                                System.out.println("First Name : "
-                                        + eElement2
+                                tmp.get(i).setLastname(eElement2.getAttribute("name"));
+                                tmp.get(i).setDate(tmp.get(i).parseStringToDate(eElement2
                                         .getElementsByTagName("date")
                                         .item(0)
-                                        .getTextContent());
-                                System.out.println("First Name2 : "
-                                        + eElement2.getAttribute("name")
-                                );
+                                        .getTextContent()), temp);
+
                             }
                         }
                     }
@@ -116,9 +120,7 @@ public class ReadingXMLconfig {
     }
 
     public void createXML(ArrayList<XMLconfig> tmp) {
-        
 
-        
     }
 
     public static void main(String[] args) {
@@ -136,9 +138,18 @@ public class ReadingXMLconfig {
     class XMLconfig {
 
         private boolean readFromFile;
-        private Date date;
-        private ArrayList<String> lastname;
+        private ArrayList<String> lastname = new ArrayList<String>();
+        private Map<Integer, Date> date = new HashMap<Integer, Date>();
+        private String userName;
 
+        public String getUserName() {
+            return userName;
+        }
+
+        public void setUserName(String userName) {
+            this.userName = userName;
+        }
+        
         public boolean isReadFromFile() {
             return readFromFile;
         }
@@ -147,28 +158,61 @@ public class ReadingXMLconfig {
             this.readFromFile = readFromFile;
         }
 
-        public Date getDate() {
-            return date;
+        public ArrayList<String> getLastname() {
+            return lastname;
         }
 
-        public void setDate(Date date) {
-            this.date = date;
+        public void setLastname(ArrayList<String> lastname) {
+            this.lastname = lastname;
         }
 
-        public String getLastRandName(final int i) {
+        public String getLastname(int i) {
             return lastname.get(i);
         }
 
-        public void addLastRandName(final int i, String lastRandName) {
-            lastname.add(i, lastRandName);
+        public void setLastname(String name) {
+            this.lastname.add(name);
         }
 
-        public void addLastRandName(String name) {
-            lastname.add(name);
+        public Map<Integer, Date> getDate() {
+            return date;
         }
 
-        public void setLastRandName(final int i, String name) {
-            lastname.set(i, name);
+        public void setDate(Map<Integer, Date> date) {
+            this.date = date;
+        }
+
+        public Date getDate(int i) {
+            return date.get(i);
+        }
+
+        public void setDate(Date d, int i) {
+            this.date.put(i, d);
+        }
+//        public void changeDate(Date d, Date a, int i){
+//            
+//        }
+
+        public Date parseStringToDate(String input) {
+            Date err = new Date(1939, 9, 1);
+            SimpleDateFormat ft
+                    = //Tue, 11 Nov 14 21:56:05 +0100
+                    new SimpleDateFormat("EEE, dd MMM yy HH:mm:ss Z");
+            try {
+                Date date = ft.parse(input);
+                return date;
+            } catch (Exception e) {
+                e.printStackTrace();
+                return err;
+            }
+
+        }
+        @Override
+        public String toString(){
+            String tmp;
+            tmp = "XML Config File Overview";
+            
+            return tmp;
         }
 
     }
