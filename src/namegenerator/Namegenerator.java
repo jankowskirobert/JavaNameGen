@@ -9,7 +9,7 @@ import java.io.IOException;
 
 /**
  *
- * @author init0
+ * @author rrjj
  */
 public class Namegenerator {
 
