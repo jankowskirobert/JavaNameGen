@@ -11,11 +11,25 @@ import java.util.Map;
  */
 public class ConfigXML {
 
+
     private boolean readFromFile;
-    private Date lastSesion;
+    private Date lastSession;
     private ArrayList<String> lastName = new ArrayList<String>();
     private Map<Integer, Date> date = new HashMap<Integer, Date>();
     private String userName;
+
+    public ConfigXML(){
+        readFromFile = false;
+        userName = "";
+    }
+
+    public Date getLastSession() {
+        return lastSession;
+    }
+
+    public void setLastSession(Date lastSession) {
+        this.lastSession = lastSession;
+    }
 
     public String getUserName() {
         return userName;
@@ -79,13 +93,7 @@ public class ConfigXML {
         }
 
     }
-    @Override
-    public String toString(){
-        String tmp;
-        tmp = "XML Config File Overview";
 
-        return tmp;
-    }
 
 }
 

@@ -4,7 +4,7 @@
 
     <user username="Test">
         <lastsession>Tue, 11 Nov 14 21:56:05 +0100</lastsession>
-        <readfromfile>true</readfromfile>
+        <readnamesfromfile>TRUE</readnamesfromfile>
     <generator>
        <lastName name="LoL">
             <date>Tue, 10 Nov 14 21:56:05 +0100</date> 
