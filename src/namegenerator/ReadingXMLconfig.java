@@ -97,26 +97,23 @@ public class ReadingXMLconfig extends ConfigXML {
                     tmp.add(new ConfigXML());
                     Node nNode = nodes.item(i);
                     if (nNode.getNodeType() == Node.ELEMENT_NODE) {
-                        //System.out.println("_______________________");
+
                         Element eElement = (Element) nNode;
                         ConfigXML tmpObj = tmp.get(i);
+
                         //add user name to object
                         tmpObj.setUserName(eElement.getAttribute("username"));
-                        //add decision about loading names from external source
-//                        System.err.println("TEST: "+Boolean.valueOf(eElement.getElementsByTagName("readnamesfromfile").item(0).getTextContent()));
 
+                        //add decision about loading names from external source
+                        boolean test = Boolean.valueOf(returnE(eElement, "readnamesfromfile").toLowerCase());
+                        tmpObj.setReadFromFile(test);
 
                         //add last saved session
                         tmpObj.setLastSession(super.parseStringToDate(returnE(eElement, "lastsession")));
 
-                        //boolean test = Boolean.valueOf(returnE(eElement,"readnamesfromfile").toString().toLowerCase());
-
-                        //System.err.println("TEST: "+test);
-                        //tmpObj.setReadFromFile(test);
-                        //tmpObj.isReadFromFile();
                         NodeList nList2 = eElement.getElementsByTagName("generator");
-                        NodeList nList3 = ((Element)nList2.item(0)).getElementsByTagName("lastname");
-                        //System.out.println("----------------------------");
+                        NodeList nList3 = ((Element)nList2.item(0)).getElementsByTagName("lastName");
+
                         for (int temp = 0; temp < nList3.getLength(); temp++) {
                             Node nNode2 = nList3.item(temp);
 
@@ -124,7 +121,7 @@ public class ReadingXMLconfig extends ConfigXML {
                                 Element eElement2 = (Element) nNode2;
 
                                 tmp.get(i).setLastname(eElement2.getAttribute("name"));
-                                //eElement2.getElementsByTagName("date").item(0).getTextContent())
+
                                 tmp.get(i).setDate(super.parseStringToDate(returnE(eElement2,"date")), temp);
 
                             }
@@ -155,33 +152,41 @@ public class ReadingXMLconfig extends ConfigXML {
             /*Main element*/
             Element rootE = doc.createElement("settings");
             doc.appendChild(rootE);
+            for (int i = 0 ; i < tmp.size() ; i++) {
 
-            Element userE = doc.createElement("user");
-            Attr userElementAttr = doc.createAttribute("username");
-            userElementAttr.setValue(""); //COMPLETE SEC ARG
-            userE.setAttributeNode(userElementAttr);
-            rootE.appendChild(userE);
+                ConfigXML temConf = tmp.get(i);
 
-            Element lastSessionE = doc.createElement("lastsession");
-            lastSessionE.appendChild(doc.createTextNode("DATE"));
-            userE.appendChild(lastSessionE);
+                Element userE = doc.createElement("user");
+                Attr userElementAttr = doc.createAttribute("username");
+                userElementAttr.setValue(temConf.getUserName());
+                userE.setAttributeNode(userElementAttr);
+                rootE.appendChild(userE);
 
-            Element readFromE = doc.createElement("readnamesfromfile");
-            readFromE.appendChild(doc.createTextNode("TRUE"));
-            userE.appendChild(readFromE);
+                Element lastSessionE = doc.createElement("lastsession");
+                lastSessionE.appendChild(doc.createTextNode(String.valueOf(temConf.getLastSession())));
+                userE.appendChild(lastSessionE);
 
-            Element generatorE = doc.createElement("generator");
-            userE.appendChild(generatorE);
+                Element readFromE = doc.createElement("readnamesfromfile");
+                readFromE.appendChild(doc.createTextNode(String.valueOf(temConf.isReadFromFile())));
+                userE.appendChild(readFromE);
 
-            Element lastNameE = doc.createElement("lastName");
-            Attr lastNameAttr = doc.createAttribute("name");
-            lastNameAttr.setValue("YOLO"); //COMPLETE SEC ARG
-            lastNameE.setAttributeNode(lastNameAttr);
-            generatorE.appendChild(lastNameE);
+                Element generatorE = doc.createElement("generator");
 
-            Element dateE = doc.createElement("date");
-            dateE.appendChild(doc.createTextNode("DATE"));
-            lastNameE.appendChild(dateE);
+                for (int j = 0 ; j < temConf.getLastName().size() ; j++) {
+
+                    Element lastNameE = doc.createElement("lastName");
+                    Attr lastNameAttr = doc.createAttribute("name");
+                    lastNameAttr.setValue(temConf.getLastname(j));
+                    lastNameE.setAttributeNode(lastNameAttr);
+                    generatorE.appendChild(lastNameE);
+
+                    Element dateE = doc.createElement("date");
+                    dateE.appendChild(doc.createTextNode(String.valueOf(temConf.getDate(j))));
+                    lastNameE.appendChild(dateE);
+                    userE.appendChild(generatorE);
+                }
+
+            }
 
             TransformerFactory transformerFactory =
                     TransformerFactory.newInstance();
