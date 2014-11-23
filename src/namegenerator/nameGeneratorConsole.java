@@ -14,10 +14,11 @@ import java.util.ArrayList;
 public class nameGeneratorConsole{
     public static void main(String[] args) {
          ReadingXMLconfig xml = ReadingXMLconfig.getInstance();
+
+
          ArrayList<ConfigXML> array = xml.readXML();
         xml.createXML(array);
         for (ConfigXML array1 : array) {
-            //System.out.printf("%10s %n",array1.toString());
             System.out.println("");
         }
         boolean test = xml.isConfig();

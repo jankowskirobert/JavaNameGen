@@ -5,29 +5,29 @@
     <user username="Test">
         <lastsession>Tue, 11 Nov 14 21:56:05 +0100</lastsession>
         <readnamesfromfile>TRUE</readnamesfromfile>
-    <generator>
-       <lastName name="LoL">
-            <date>Tue, 10 Nov 14 21:56:05 +0100</date> 
-       </lastName>
-       <lastName name="Nope">
-            <date>Tue, 9 Nov 14 21:56:05 +0100</date> 
-       </lastName>
-    </generator>
+        <generator>
+            <lastName name="LoL">
+                <date>Tue, 10 Nov 14 21:56:05 +0100</date>
+            </lastName>
+            <lastName name="Nope">
+                <date>Tue, 9 Nov 14 21:56:05 +0100</date>
+            </lastName>
+        </generator>
     </user>
 
 
     <user username="Test2">
         <lastsession>Tue, 11 Nov 14 21:56:05 +0100</lastsession>
-        <readfromfile>true</readfromfile>
-    <generator>
-       <lastName name="LoL">
-            <date>Tue, 18 Nov 14 21:56:05 +0100</date> 
-       </lastName>
-       <lastName name="Nope">
-            <date>Tue, 7 Nov 14 21:56:05 +0100</date> 
-       </lastName>
-    </generator>
-    </user> 
+        <readnamesfromfile>true</readnamesfromfile>
+        <generator>
+            <lastName name="LoL">
+                <date>Tue, 18 Nov 14 21:56:05 +0100</date>
+            </lastName>
+            <lastName name="Nope">
+                <date>Tue, 7 Nov 14 21:56:05 +0100</date>
+            </lastName>
+        </generator>
+    </user>
 
 
 </settings>

@@ -1,10 +1,10 @@
 package namegenerator;
 
+
+import java.text.DateFormat;
+import java.text.ParseException;
 import java.text.SimpleDateFormat;
-import java.util.ArrayList;
-import java.util.Date;
-import java.util.HashMap;
-import java.util.Map;
+import java.util.*;
 
 /**
  * Created by init0 on 19.11.14.
@@ -17,12 +17,11 @@ public class ConfigXML {
     private ArrayList<String> lastName = new ArrayList<String>();
     private Map<Integer, Date> date = new HashMap<Integer, Date>();
     private String userName;
-
+    private SimpleDateFormat ft = new SimpleDateFormat("E, d MMM yy HH:mm:ss Z", Locale.US); //Tue, 1 Nov 14 21:56:05 +0100 EXAMPLE
     public ConfigXML(){
         readFromFile = false;
         userName = "";
     }
-
     public Date getLastSession() {
         return lastSession;
     }
@@ -72,28 +71,33 @@ public class ConfigXML {
 //        }
 
     public Date getDate(int i) {
-        return date.get(i);
-    }
 
+        return date.get(i);
+
+    }
     public void setDate(Date d, int i) {
+
         this.date.put(i, d);
     }
-
     public Date parseStringToDate(String input) {
-        Date err = new Date(1939, 9, 1);
-        SimpleDateFormat ft
-                = //Tue, 11 Nov 14 21:56:05 +0100
-                new SimpleDateFormat("EEE, dd MMM yy HH:mm:ss Z");
+        String errDate = "Tue, 1 Nov 00 06:06:06 +0100";
+        Date err = new Date();
         try {
-            Date date = ft.parse(input);
+
+            err = (Date) ft.parseObject(errDate);
+        } catch (ParseException e) {
+            e.printStackTrace();
+        }
+        try {
+            Date date = (Date) ft.parseObject(input);
             return date;
-        } catch (Exception e) {
+        } catch (ParseException e) {
             e.printStackTrace();
             return err;
         }
-
     }
-
-
+    public String parseDateToString(Date date){
+        return ft.format(date);
+    }
 }
 

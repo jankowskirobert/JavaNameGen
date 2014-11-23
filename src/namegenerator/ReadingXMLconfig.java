@@ -41,13 +41,22 @@ import org.xml.sax.SAXException;
  */
 public class ReadingXMLconfig extends ConfigXML {
 
-    private static final String fileName = "config.xml";
+    private final String fileName;
+    private final String fileNameForTest;
     private static ReadingXMLconfig instance = new ReadingXMLconfig();
+    static {
+        instance = new ReadingXMLconfig();
+    }
+    {
+        fileName = "config.xml";
+        fileNameForTest = "test.xml";
+    }
+
     private File xmlConfig;
     private BufferedReader br;
     
     private ReadingXMLconfig(){
-        xmlConfig = new File("config.xml");
+        xmlConfig = new File(fileName);
         try {
             br = new BufferedReader(new FileReader(xmlConfig.getAbsolutePath()));
         } catch (FileNotFoundException ex) {
@@ -79,11 +88,8 @@ public class ReadingXMLconfig extends ConfigXML {
     }
 
     /**
-     * Zastanowić się nad zwracaniem i sensem metody Dodać czytanie noda
-     * <generator>
-     * dodać funkcje createXML oraz modyfiy jesli sie da
      *
-     * @return ConfigXML
+     * @return ArrayList<ConfigXML>
      */
     public ArrayList<ConfigXML> readXML() {
         ArrayList<ConfigXML> tmp = new ArrayList<ConfigXML>();// = new ConfigXML();
@@ -109,7 +115,7 @@ public class ReadingXMLconfig extends ConfigXML {
                         tmpObj.setReadFromFile(test);
 
                         //add last saved session
-                        tmpObj.setLastSession(super.parseStringToDate(returnE(eElement, "lastsession")));
+                        tmpObj.setLastSession(parseStringToDate(returnE(eElement, "lastsession")));
 
                         NodeList nList2 = eElement.getElementsByTagName("generator");
                         NodeList nList3 = ((Element)nList2.item(0)).getElementsByTagName("lastName");
@@ -122,13 +128,13 @@ public class ReadingXMLconfig extends ConfigXML {
 
                                 tmp.get(i).setLastname(eElement2.getAttribute("name"));
 
-                                tmp.get(i).setDate(super.parseStringToDate(returnE(eElement2,"date")), temp);
+                                tmp.get(i).setDate(parseStringToDate(returnE(eElement2,"date")), temp);
 
                             }
                         }
                     }
                 }
-            } catch (NullPointerException ex/* :| so bad... */) {
+            } catch (NullPointerException ex) {
                 Logger.getLogger(ReadingXMLconfig.class.getName()).log(Level.SEVERE, null, ex);
             } catch (ParserConfigurationException e) {
                 e.printStackTrace();
@@ -163,7 +169,7 @@ public class ReadingXMLconfig extends ConfigXML {
                 rootE.appendChild(userE);
 
                 Element lastSessionE = doc.createElement("lastsession");
-                lastSessionE.appendChild(doc.createTextNode(String.valueOf(temConf.getLastSession())));
+                lastSessionE.appendChild(doc.createTextNode(parseDateToString(temConf.getLastSession())));
                 userE.appendChild(lastSessionE);
 
                 Element readFromE = doc.createElement("readnamesfromfile");
@@ -181,7 +187,7 @@ public class ReadingXMLconfig extends ConfigXML {
                     generatorE.appendChild(lastNameE);
 
                     Element dateE = doc.createElement("date");
-                    dateE.appendChild(doc.createTextNode(String.valueOf(temConf.getDate(j))));
+                    dateE.appendChild(doc.createTextNode(String.valueOf(parseDateToString(temConf.getDate(j)))));
                     lastNameE.appendChild(dateE);
                     userE.appendChild(generatorE);
                 }
@@ -194,14 +200,14 @@ public class ReadingXMLconfig extends ConfigXML {
                     transformerFactory.newTransformer();
             DOMSource source = new DOMSource(doc);
             StreamResult result =
-                    new StreamResult(new File("text.xml"));
+                    new StreamResult(new File(fileNameForTest));
             transformer.transform(source, result);
             // Output to console for testing
             StreamResult consoleResult =
                     new StreamResult(System.out);
             transformer.transform(source, consoleResult);
 
-        }catch (NullPointerException x /*BADDDDD*/){
+        }catch (NullPointerException x){
             System.err.println(""+x);
         } catch (ParserConfigurationException e) {
             e.printStackTrace();
@@ -213,20 +219,14 @@ public class ReadingXMLconfig extends ConfigXML {
 
     }
     public String returnE(Element e, String node){
-        return e.getElementsByTagName(node).item(0).getTextContent();
+        String tmp = e.getElementsByTagName(node).item(0).getTextContent();
+        return tmp;
     }
 
-
+      /*TEST*/
     public static void main(String[] args) {
         ReadingXMLconfig xml = new ReadingXMLconfig().getInstance();
-//        xml.readXML();
-//        boolean test = xml.isConfig();
-//        if (test) {
-//
-//            System.out.println("TAK");
-//        } else {
-//            System.out.println("NIE");
-//        }
+        xml.createXML(xml.readXML());
     }
 
 
